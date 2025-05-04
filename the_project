@@ -1,125 +1,94 @@
-# استدعاء المكتبات 
+# أستدعاء المكتبات
 from tkinter import *
 from tkinter import ttk
-import string
-import random
 
-
-#عمل النافذه
+# صناعة النافذة
 window = Tk()
-window.geometry("800x600")
-window.title("Password Maker")
-window.resizable(False , False)
-window.config(bg = "#1E1E1E")
-window.iconbitmap("C:\\Users\\manof\\desktop\\locked.ico") # وضع ايقونه
-#صناعة متغيرات
-var_cb1 = BooleanVar()
-var_cb2 = BooleanVar()
-var_cb3 = BooleanVar()
-var_cb4 = BooleanVar()
+window.geometry("400x500")
+window.title("Calculator")
+window.resizable(False , False) 
+window.config(bg = "#1E1E1E" , relief = "groove" , bd = 5)
 
 
-#دالة صناعة كلمة السر
-def Make_Password() :
- password = []
- word = []
- password.clear()
-
- #سلاسل التحقق
- if var_cb1.get() :
-  word.append(string.ascii_lowercase)
-
- if var_cb2.get() :
-  word.append(string.ascii_uppercase) 
-
- if var_cb3.get() :
-  word.append(string.digits)
+# كلاس الأزرار
+class Buttons() :
+ def __init__(self , name , x , y , width = 3 , color = "#4CAF50" , height = 1 , size = 30) :
+    self.name = name
+    self.x = x
+    self.y = y
+    self.width = width
+    self.color = color
+    self.size = size
+    self.style = ttk.Style()
+    self.style.theme_use("clam")
+    self.style.configure(f"{name}Style.TButton" , font = ("arial" , size , "bold") , width = width , background = color , height = height)
+    self.button = ttk.Button(window , text = name , command = self.Button_Task , style = f"{name}Style.TButton")
  
- if var_cb4.get() :
-  word.append(string.punctuation)
 
- if word == [] :
-  Password_label.config(text = "Choose Password (Small letters - Capital Letters - Digits - punctuations)" , fg = "red" , font = ("arial" , 15 , "bold"))
-  return 
+ # دالة عرض الأزرار
+ def display_button(self) :
+    self.button.place(x = self.x , y = self.y)
+ 
+ # دالة خصائص كل زرار
+ def Button_Task(self) :
+  if self.name == "C" :
+    Screen.delete(0 , END)
+  
+  elif self.name == "=" :
+    try :
+     Answer = eval(Screen.get())
+     Screen.delete(0 , END)
+     Screen.insert(0 , Answer)
+    except :
+      
+      Screen.delete(0 , END)
+      Screen.insert(0 ,"Error")
+      
+  else :
+   Screen.insert(END , self.name)
 
- try : #منع الأخطاء
-  #الحلقة لصناعة الباسورد
-  for letter in range(0 , int(Password_number.get())) :
-   password.append(random.choice(random.choice(word)))
-
-  Password_label.config(text = "".join(password) , fg = "white" , font = 20)
- except :
-  Password_label.config(text = "Enter Password Number" , fg = "red")
-
-#صناعة شكل الأزرار
-Button_Style = ttk.Style()
-Button_Style.theme_use("clam")
-Button_Style.configure("TButton" , background = "#FFA500" , font = ("Courier" , 20 , "bold"))
-
-
-# دالة نسخ كلمة السر
-def Copy_Password() :
- if Password_label.cget("text") == "" or Password_label.cget("text") == "Enter Password Number" :
-  return
- window.clipboard_clear()
- window.clipboard_append(Password_label.cget("text"))
- window.update()
- Success = Label(window , text = "Successed ✅" , font = ("arial" , 20 , "bold") , fg = "green" , bg = "#1E1E1E")
- Success.place(x = 230 , y = 320)
- window.after(1000 , Success.place_forget) # تظهر ثانيه وتختفي
-
-
-#العنوان
-the_title = Label(window , text = "Password Maker" , font = ("Courier" , 17 , "bold") , bg = "black" , fg = "white")
-the_title.pack(fill = X)
-
-
-#الصوره
-photo_file = PhotoImage(file = "C:\\Users\\manof\\downloads\\padlock.png")
-small_photo_file = photo_file.subsample(3 , 3) #تصغير الصوره
-
-#استخدام الصوره
-Photo = Label(window , image = small_photo_file , bg = "#1E1E1E")
-Photo.place(x = 60 , y = 120)
+# صناعة الأزرار
+Button0 = Buttons("0" , 0 , 90 , 7 , "#4CAF50" , 1 , 20)
+Button1 = Buttons("1" , 0 , 150)
+Button2 = Buttons("2" , 85 , 150)
+Button3 = Buttons("3" , 170 , 150)
+Button4 = Buttons("4" , 0, 235)
+Button5 = Buttons("5" , 85 , 235)
+Button6 = Buttons("6" , 170 , 235)
+Button7 = Buttons("7" , 0 , 320)
+Button8 = Buttons("8" , 85 , 320)
+Button9 = Buttons("9" , 170 , 320)
+C_button = Buttons("C" , 0 , 405 , 6 , "#F44336")
+Equle_button = Buttons("=" , 158 , 405 , 9 , "#2196F3")
+plus_button = Buttons("+" , 260 , 322 , 5 , "#FF9800" , 2 , 27)
+mines_button = Buttons("-" , 260 , 237 , 5 , "#FF9800" , 2 , 27)
+Multiplication_button = Buttons("*" , 260 , 152 , 5 , "#FF9800" , 1 , 27)
+Division_button = Buttons("/" , 257 , 90 , 7 , "#FF9800" , 1 , 20)
+exponent_button = Buttons("**" , 130 , 90 , 6 , "#FF9800" , 1 , 20)
+Screen = Entry(window , relief = "groove" , bd = 4 , width = 14 , fg = "white" , font = ("arial" , 37 , "bold") , bg = "#2D2D2D")
+Icon = Label(window , text = "Simple Tech ⚙️" , fg = "white" , bg = "#1E1E1E" , font = ("Verdana" , 7 , "bold"))
 
 
-#عدد الأحرف
-Password_number = ttk.Spinbox(window , from_ = 5 , to = 40 , width = 10 , state = "readonly")
-Password_number.place(x = 300 , y = 150)
+# أظهار الأزرار
+Button0.display_button()
+Button1.display_button()
+Button2.display_button()
+Button3.display_button()
+Button4.display_button()
+Button5.display_button()
+Button6.display_button()
+Button7.display_button()
+Button8.display_button()
+Button9.display_button()
+C_button.display_button()
+Equle_button.display_button()
+plus_button.display_button()
+mines_button.display_button()
+Multiplication_button.display_button()
+Division_button.display_button()
+exponent_button.display_button()
+Screen.place(relx = 0.5 , rely = 0.1 , anchor = "center")
+Icon.place(relx = 0.1 , rely = 0.018 , anchor = "center")
 
 
-#نص الذي يمثل كلمة السر
-Password_label = Label(window , text = "" , bg = "#1E1E1E" , font = ("Arial" , 20 , "bold") , fg = "white")
-Password_label.place(x = 20 , y = 400)
-
-
-#زر النسخ
-Copy_Button = Button(window , text = "Copy ©️" , font = ("arial" , 10 , "bold") , command = Copy_Password , bg = "#1E1E1E" , fg = "#6f6e6c")
-Copy_Button.place(x = 50 , y = 330)
-
-
-#زر الأحرف الصغيره
-Small_cb = Checkbutton(window , text = "Small letters" ,font = ("arial" , 15 , "bold") , variable = var_cb1 , bg = "#1E1E1E" , fg = "gray" , activebackground = "#1E1E1E" , activeforeground = "gray")
-Small_cb.place(x = 540 , y = 40)
-
-
-#زر الأحرف الكبيره
-Capital_cb = Checkbutton(window , text = "Capital letters" , font = ("arial" , 15 , "bold") , variable = var_cb2 , bg = "#1E1E1E" , fg = "gray" , activebackground = "#1E1E1E" , activeforeground = "gray")
-Capital_cb.place(x = 540 , y = 110)
-
-
-#زر الأرقام
-Digits_cb = Checkbutton(window , text = "Digits" , font = ("arial" , 15 , "bold") , variable = var_cb3 , bg = "#1E1E1E" , fg = "gray" , activebackground = "#1E1E1E" , activeforeground = "gray")
-Digits_cb.place(x = 540 , y = 180)
-
-
-#زر العلامات والرموز
-punctuation_cb = Checkbutton(window , text = "punctuations" , font = ("arial" , 15 , "bold") , variable = var_cb4 , bg = "#1E1E1E" , fg = "gray" , activebackground = "#1E1E1E" , activeforeground = "gray")
-punctuation_cb.place(x = 540 , y = 250)
-
-#زر صناعة الباسورد
-Generate_btn = ttk.Button(window , text = "Make Password" , command = Make_Password)
-Generate_btn.place(x = 270 , y = 200)
 window.mainloop()
-
-
